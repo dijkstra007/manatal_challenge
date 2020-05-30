@@ -21,4 +21,5 @@ class Student(models.Model):
 
 
     def __str__(self):
-        return self.choice_text
+        return self.first_name + self.last_name
+
