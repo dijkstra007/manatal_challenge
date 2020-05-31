@@ -17,6 +17,7 @@ drf-nested-routers = "*"
 gunicorn = "*"
 whitenoise = "*"
 django-heroku = "*"
+faker = "*"
 
 [requires]
 python_version = "3.8"
