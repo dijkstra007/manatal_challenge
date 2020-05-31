@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.core.exceptions import ValidationError
 from rest_framework import viewsets
 from .models import School, Student
 from django.shortcuts import get_object_or_404
@@ -35,7 +36,7 @@ class StudentViewSet(viewsets.ModelViewSet):
 
         return queryset
 
-def generate_fake_students(request):
+def generate_fake_student(request):
     fake = Faker()
 
     full_name = fake.name()
@@ -54,4 +55,26 @@ def generate_fake_students(request):
     print('-------------------------------------')
     print(first_name, last_name, age, school, address)
     print('-------------------------------------')
-    return HttpResponse("studetns are generated in database")
+    return HttpResponse("studetns is generated in database." % full_name)
+
+
+
+# name = models.CharField(max_length=20)
+#     max_student = models.IntegerField(default=0)
+#     address = models.TextField(blank=True)
+
+def generate_fake_school(request):
+    fake = Faker()
+
+    name = fake.company()
+
+    max_student = random.randint(5, 10)
+
+    address = fake.address()
+
+    fake_school = School(name = name, max_student = max_student , address = address)
+    fake_school.save()
+    print('-------------------------------------')
+    print(name, max_student, address)
+    print('-------------------------------------')
+    return HttpResponse("school named %s is generated in database" % name)

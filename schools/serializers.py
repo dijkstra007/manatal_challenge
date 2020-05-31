@@ -1,6 +1,6 @@
 from .models import School, Student
 from rest_framework import serializers
-
+from .utils import get_n_students_and_max_students
 
 class SchoolSerializer(serializers.ModelSerializer):
 
@@ -15,20 +15,14 @@ class StudentSerializer(serializers.HyperlinkedModelSerializer):
         fields = ("url", "student_id", "first_name", "last_name","age", "school", "address")
 
     def create(self, validated_data):
-        number_of_students = Student.objects.filter(
-            school=validated_data.get('school')).count()
-        limit_number_of_student = School.objects.get(
-            pk=validated_data.get('school').id).max_student
-        if number_of_students >= limit_number_of_student:
+        n_students, max_students = get_n_students_and_max_students(validated_data.get('school'))
+        if n_students >= max_students:
             raise serializers.ValidationError("this school is full. please join to another school.")
         return Student.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        number_of_students = Student.objects.filter(
-            school=validated_data.get('school')).count()
-        limit_number_of_student = School.objects.get(
-            pk=validated_data.get('school').id).max_student
-        if number_of_students >= limit_number_of_student:
+        n_students, max_students = get_n_students_and_max_students(validated_data.get('school'))
+        if n_students >= max_students:
             raise serializers.ValidationError("this school is full. please join to another school.")
 
         instance.student_id = validated_data.get('student_id', instance.student_id)
