@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from rest_framework import viewsets
 from .models import School, Student
 from django.shortcuts import get_object_or_404
@@ -9,31 +10,42 @@ from rest_framework.decorators import action
 from faker import Faker
 import random
 
+
 # Create your views here.
 
 class SchoolViewSet(viewsets.ModelViewSet):
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
+    items_per_page = 3
 
     def get_queryset(self):
-        queryset = School.objects.all()
+        queryset_list = School.objects.all()
         name = self.request.query_params.get('name', None)
         if name:
-            queryset=queryset.filter(name__contains=name)
+            queryset_list=queryset_list.filter(name__contains=name)
 
         min_capacity = self.request.query_params.get('min_capacity', None)
         if min_capacity:
             min_capacity = int(min_capacity)
-            queryset=queryset.filter(max_student__gte=min_capacity)
+            queryset_list=queryset_list.filter(max_student__gte=min_capacity)
 
         max_capacity = self.request.query_params.get('max_capacity', None)
         if max_capacity:
             max_capacity = int(max_capacity)
-            queryset=queryset.filter(max_student__lte=max_capacity)
+            queryset_list=queryset_list.filter(max_student__lte=max_capacity)
 
         address = self.request.query_params.get('address', None)
         if address:
-            queryset=queryset.filter(address__contains=address)
+            queryset_list=queryset_list.filter(address__contains=address)
+
+        paginator = Paginator(queryset_list, self.items_per_page)
+        page = self.request.GET.get('page')
+        try:
+            queryset = paginator.page(page)
+        except PageNotAnInteger:
+            queryset = queryset_list
+        except EmptyPage:
+            queryset = paginator.page(paginator.num_pages)
 
         return queryset
     
@@ -41,30 +53,39 @@ class SchoolViewSet(viewsets.ModelViewSet):
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    
+    items_per_page = 3
     def get_queryset(self):
-        queryset = Student.objects.all()
+        queryset_list = Student.objects.all()
+        
         school_id = self.kwargs.get('school_pk', None)
-
         if school_id:
-            queryset = Student.objects.filter(school = school_id)
+            queryset_list = Student.objects.filter(school = school_id)
         first_name = self.request.query_params.get('first_name', None)
 
         if first_name:
-            queryset=queryset.filter(first_name__contains=first_name)
+            queryset_list=queryset_list.filter(first_name__contains=first_name)
 
         last_name = self.request.query_params.get('last_name', None)
         if last_name:
-            queryset=queryset.filter(last_name__contains=last_name)
+            queryset_list=queryset_list.filter(last_name__contains=last_name)
 
         address = self.request.query_params.get('address', None)
         if address:
-            queryset=queryset.filter(address__contains=address)
+            queryset_list=queryset_list.filter(address__contains=address)
 
         order_by_age = self.request.query_params.get('order_by_age', None)
         if order_by_age:
             order_sign = '' if order_by_age == 'asc' else '-'
-            queryset = queryset.order_by(order_sign + 'age')
+            queryset_list = queryset_list.order_by(order_sign + 'age')
+
+        paginator = Paginator(queryset_list, self.items_per_page)
+        page = self.request.GET.get('page')
+        try:
+            queryset = paginator.page(page)
+        except PageNotAnInteger:
+            queryset = queryset_list
+        except EmptyPage:
+            queryset = paginator.page(paginator.num_pages)
 
         return queryset
 
@@ -89,11 +110,6 @@ def generate_fake_student(request):
     print('-------------------------------------')
     return HttpResponse("studetns named %s is generated in database." % full_name)
 
-
-
-# name = models.CharField(max_length=20)
-#     max_student = models.IntegerField(default=0)
-#     address = models.TextField(blank=True)
 
 def generate_fake_school(request):
     fake = Faker()
