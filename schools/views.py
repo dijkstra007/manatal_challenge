@@ -14,6 +14,7 @@ import random
 class SchoolViewSet(viewsets.ModelViewSet):
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
+    
 
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
@@ -33,6 +34,10 @@ class StudentViewSet(viewsets.ModelViewSet):
         last_name = self.request.query_params.get('last_name', None)
         if last_name:
             queryset=queryset.filter(last_name__contains=last_name)
+
+        address = self.request.query_params.get('address', None)
+        if address:
+            queryset=queryset.filter(address__contains=address)
 
         return queryset
 
