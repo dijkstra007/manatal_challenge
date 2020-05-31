@@ -6,6 +6,7 @@ router = routers.DefaultRouter()
 router.register('schools', views.SchoolViewSet)
 router.register('students', views.StudentViewSet)
 
+#/school/{school_id}/students
 schools_router = routers.NestedSimpleRouter(router, r'schools', lookup='school')
 schools_router.register(r'students', views.StudentViewSet, basename='school-students')
 
