@@ -6,7 +6,7 @@ class SchoolSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = School
-        fields = ("id", "name", "max_student")
+        fields = ("id", "name", "max_student", "address")
 
 
 class StudentSerializer(serializers.HyperlinkedModelSerializer):

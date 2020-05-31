@@ -14,6 +14,28 @@ import random
 class SchoolViewSet(viewsets.ModelViewSet):
     queryset = School.objects.all()
     serializer_class = SchoolSerializer
+
+    def get_queryset(self):
+        queryset = School.objects.all()
+        name = self.request.query_params.get('name', None)
+        if name:
+            queryset=queryset.filter(name__contains=name)
+
+        min_capacity = self.request.query_params.get('min_capacity', None)
+        if min_capacity:
+            min_capacity = int(min_capacity)
+            queryset=queryset.filter(max_student__gte=min_capacity)
+
+        max_capacity = self.request.query_params.get('max_capacity', None)
+        if max_capacity:
+            max_capacity = int(max_capacity)
+            queryset=queryset.filter(max_student__lte=max_capacity)
+
+        address = self.request.query_params.get('address', None)
+        if address:
+            queryset=queryset.filter(address__contains=address)
+
+        return queryset
     
 
 class StudentViewSet(viewsets.ModelViewSet):
