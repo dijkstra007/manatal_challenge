@@ -15,6 +15,7 @@ markdown = "*"
 django-filter = "*"
 drf-nested-routers = "*"
 gunicorn = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.8"
