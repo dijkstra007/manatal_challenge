@@ -1,10 +1,10 @@
-# Chinnawat Ong-art Challenge:
+# Chinnawat Ong-art's Challenge:
 
 This is a challenge project from Manatal back end team to evaluate how good you are with building APIs with Django.
 
 ## Step 0 (spent 3 days)
 
-- Learning
+- ✅ Learning
 
 ## Step 1 (spent 1 day)
 
@@ -62,11 +62,15 @@ This third step focuses on __Django Nested Routers__.
 ## Heroku
 - https://nameless-journey-20986.herokuapp.com/
 
+
+
 ## Pagination example
 
 ```
 http://127.0.0.1:8000/schools/?page=1
 ```
+
+
 
 # Searching example
 ## School
@@ -88,6 +92,7 @@ http://127.0.0.1:8000/students/?address=Bangkok //address.contains('Bangkok')
 
 ```
 
+
 # Ordering example
 ## School
 ```
@@ -97,6 +102,8 @@ http://127.0.0.1:8000/schools/?order_by_max_student=asc // order by max_student 
 ```
 http://127.0.0.1:8000/students/?order_by_age=asc // order by age with ascending order
 ```
+
+
 
 # Generate Fake data to database
 ## School

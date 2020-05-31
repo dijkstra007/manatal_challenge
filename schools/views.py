@@ -120,9 +120,6 @@ def generate_fake_student(request):
 
     fake_student = Student(first_name = first_name, last_name = last_name , age = age, school = school, address = address)
     fake_student.save()
-    print('-------------------------------------')
-    print(first_name, last_name, age, school, address)
-    print('-------------------------------------')
     return HttpResponse("studetns named %s is generated in database." % full_name)
 
 
@@ -137,7 +134,5 @@ def generate_fake_school(request):
 
     fake_school = School(name = name, max_student = max_student , address = address)
     fake_school.save()
-    print('-------------------------------------')
-    print(name, max_student, address)
-    print('-------------------------------------')
+
     return HttpResponse("school named %s is generated in database" % name)
