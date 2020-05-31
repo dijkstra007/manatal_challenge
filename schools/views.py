@@ -38,6 +38,11 @@ class SchoolViewSet(viewsets.ModelViewSet):
         if address:
             queryset_list=queryset_list.filter(address__contains=address)
 
+        order_by_max_student = self.request.query_params.get('order_by_max_student', None)
+        if order_by_max_student:
+            order_sign = '' if order_by_max_student == 'asc' else '-'
+            queryset_list = queryset_list.order_by(order_sign + 'max_student')
+
         paginator = Paginator(queryset_list, self.items_per_page)
         page = self.request.GET.get('page')
         try:
