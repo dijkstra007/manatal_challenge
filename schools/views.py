@@ -39,6 +39,11 @@ class StudentViewSet(viewsets.ModelViewSet):
         if address:
             queryset=queryset.filter(address__contains=address)
 
+        order_by_age = self.request.query_params.get('order_by_age', None)
+        if order_by_age:
+            order_sign = '' if order_by_age == 'asc' else '-'
+            queryset = queryset.order_by(order_sign + 'age')
+
         return queryset
 
 def generate_fake_student(request):
@@ -60,7 +65,7 @@ def generate_fake_student(request):
     print('-------------------------------------')
     print(first_name, last_name, age, school, address)
     print('-------------------------------------')
-    return HttpResponse("studetns is generated in database." % full_name)
+    return HttpResponse("studetns named %s is generated in database." % full_name)
 
 
 
