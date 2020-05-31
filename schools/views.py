@@ -16,7 +16,19 @@ class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = StudentSerializer
     
     def get_queryset(self):
+        queryset = Student.objects.all()
         school_id = self.kwargs.get('school_pk', None)
+
         if school_id:
-            return Student.objects.filter(school = school_id)
-        return super(StudentViewSet, self).get_queryset()
+            queryset = Student.objects.filter(school = school_id)
+        first_name = self.request.query_params.get('first_name', None)
+
+        if first_name:
+            queryset=queryset.filter(first_name__contains=first_name)
+
+        last_name = self.request.query_params.get('last_name', None)
+        if last_name:
+            queryset=queryset.filter(last_name__contains=last_name)
+
+        return queryset
+
