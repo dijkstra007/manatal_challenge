@@ -74,6 +74,16 @@ class StudentViewSet(viewsets.ModelViewSet):
         if last_name:
             queryset_list=queryset_list.filter(last_name__contains=last_name)
 
+        min_age = self.request.query_params.get('min_age', None)
+        if min_age:
+            min_age = int(min_age)
+            queryset_list=queryset_list.filter(age__gte=min_age)
+
+        max_age = self.request.query_params.get('max_age', None)
+        if max_age:
+            max_age = int(max_age)
+            queryset_list=queryset_list.filter(age__lte=max_age)
+
         address = self.request.query_params.get('address', None)
         if address:
             queryset_list=queryset_list.filter(address__contains=address)
