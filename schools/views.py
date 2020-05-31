@@ -14,3 +14,9 @@ class SchoolViewSet(viewsets.ModelViewSet):
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    
+    def get_queryset(self):
+        school_id = self.kwargs.get('school_pk', None)
+        if school_id:
+            return Student.objects.filter(school = school_id)
+        return super(StudentViewSet, self).get_queryset()
