@@ -9,6 +9,7 @@ import datetime
 class School(models.Model):
     name = models.CharField(max_length=20)
     max_student = models.IntegerField(default=0)
+    address = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
@@ -18,6 +19,8 @@ class Student(models.Model):
     student_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
+    age = models.IntegerField(null=True)
+    address = models.TextField(blank=True)
 
 
     def __str__(self):

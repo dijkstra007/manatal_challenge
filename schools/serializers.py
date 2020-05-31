@@ -12,7 +12,7 @@ class SchoolSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Student
-        fields = ("url", "student_id", "first_name", "last_name", "school")
+        fields = ("url", "student_id", "first_name", "last_name","age", "school", "address")
 
     def create(self, validated_data):
         number_of_students = Student.objects.filter(
