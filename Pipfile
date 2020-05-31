@@ -13,6 +13,7 @@ pylint = "*"
 djangorestframework = "*"
 markdown = "*"
 django-filter = "*"
+drf-nested-routers = "*"
 
 [requires]
 python_version = "3.8"
